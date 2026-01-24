@@ -1,7 +1,3 @@
-Here is a professional, institutional-grade description for your GitHub repository:
-
----
-
 # 📈 Binance Copy Trading Intelligence (BCTI)
 
 An institutional-grade analytics suite and dashboard designed to audit, filter, and monitor top-performing lead traders on the Binance Copy Trading platform. BCTI provides deep-dive insights that go beyond the standard UI, helping investors identify sustainable alpha while avoiding high-churn "burn-and-turn" strategies.
