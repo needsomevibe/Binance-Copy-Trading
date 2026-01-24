@@ -22,8 +22,8 @@ An institutional-grade analytics suite and dashboard designed to audit, filter, 
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/yourusername/binance-copy-trading-intel.git
-    cd binance-copy-trading-intel
+    git clone https://github.com/ramayzzz/Binance-Copy-Trading.git
+    cd Binance-Copy-Trading
     ```
 
 2.  **Install dependencies:**
