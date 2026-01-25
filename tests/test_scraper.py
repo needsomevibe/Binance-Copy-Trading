@@ -63,14 +63,7 @@ class TestBinanceScraper(unittest.TestCase):
         self.assertEqual(assets[0].volume_percent, 0.5)
         self.assertEqual(assets[1].asset, "ETH")
         self.assertEqual(assets[1].volume_percent, 0.3)
-        self.assertEqual(assets[2].volume_percent, 0.0) # Handled by logic or model? Model doesn't handle validation for this specific call in scraper, scraper does it manually.
-        # Wait, I updated scraper to use: AssetAllocation(asset=item.get("asset"), volume_percent=float(item.get("volume", 0)))
-        # Pydantic validates type. 'volume'="0.3" -> float(0.3) works. None -> float(0) works? No, float(None) fails.
-        # Let's check my scraper logic: float(item.get("volume", 0))
-        # if volume is None, get returns None (default is ignored if key exists).
-        # Actually item.get("volume", 0) returns None if key exists and value is None.
-        # So float(None) -> TypeError.
-        # I should fix this in the scraper code if the test fails.
+        self.assertEqual(assets[2].volume_percent, 0.0)
 
 if __name__ == '__main__':
     unittest.main()
