@@ -4,6 +4,11 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
+class GeoBlockError(Exception):
+    """Raised when Binance returns 451 (geo/legal block)."""
+    pass
+
 class APIClient:
     def __init__(self, base_url: str, headers: dict):
         self.base_url = base_url
@@ -23,8 +28,15 @@ class APIClient:
             if response.status_code == 429:
                 logger.warning(f"Rate limited on {endpoint}. Backing off.")
                 raise requests.ConnectionError("Rate limited")
+            if response.status_code == 451:
+                raise GeoBlockError(
+                    "Binance returned 451: this server's IP is geo-blocked by Binance (likely US region). "
+                    "Run the app locally or on a non-US server."
+                )
             response.raise_for_status()
             return response.json()
+        except GeoBlockError:
+            raise
         except requests.exceptions.RequestException as e:
             logger.error(f"POST {url} failed: {e}")
             raise
@@ -41,8 +53,15 @@ class APIClient:
             if response.status_code == 429:
                 logger.warning(f"Rate limited on {endpoint}. Backing off.")
                 raise requests.ConnectionError("Rate limited")
+            if response.status_code == 451:
+                raise GeoBlockError(
+                    "Binance returned 451: this server's IP is geo-blocked by Binance (likely US region). "
+                    "Run the app locally or on a non-US server."
+                )
             response.raise_for_status()
             return response.json()
+        except GeoBlockError:
+            raise
         except requests.exceptions.RequestException as e:
             logger.error(f"GET {url} failed: {e}")
             raise

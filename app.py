@@ -9,6 +9,7 @@ import os
 sys.path.append(os.path.join(os.path.dirname(__file__), 'src'))
 
 from core.scraper import BinanceScraper
+from core.api_client import GeoBlockError
 
 st.set_page_config(
     page_title="Binance Copy Trading Intelligence",
@@ -217,6 +218,15 @@ if run:
         status.success(f"✅ Loaded **{len(all_traders)}** traders successfully.")
         st.session_state.master_data = all_traders
 
+    except GeoBlockError:
+        bar.empty()
+        st.error(
+            "🌍 **Geo-block detected (HTTP 451)**\n\n"
+            "Binance blocks requests from this server's region (Streamlit Cloud runs on US infrastructure). "
+            "**Options:**\n"
+            "- Run the app **locally** on your own machine\n"
+            "- Deploy on a **non-US server** (e.g. EU/Asia VPS)"
+        )
     except Exception as e:
         bar.empty()
         st.error(f"❌ Error: {e}")
