@@ -15,8 +15,8 @@ class BinanceScraper:
         "clienttype": "web"
     }
 
-    def __init__(self):
-        self.client = APIClient(self.API_BASE, self.HEADERS)
+    def __init__(self, proxy: str = None):
+        self.client = APIClient(self.API_BASE, self.HEADERS, proxy=proxy)
 
     def fetch_traders(self, page: int = 1, page_size: int = 20, time_range: str = "90D", data_type: str = "SHARP_RATIO") -> List[Dict]:
         endpoint = "friendly/future/copy-trade/home-page/query-list"

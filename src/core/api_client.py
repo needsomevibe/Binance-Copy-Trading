@@ -10,11 +10,13 @@ class GeoBlockError(Exception):
     pass
 
 class APIClient:
-    def __init__(self, base_url: str, headers: dict):
+    def __init__(self, base_url: str, headers: dict, proxy: str = None):
         self.base_url = base_url
         self.headers = headers
         self.session = requests.Session()
         self.session.headers.update(headers)
+        if proxy:
+            self.session.proxies = {"http": proxy, "https": proxy}
 
     @retry(
         stop=stop_after_attempt(3),

@@ -170,13 +170,23 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# ── Initialize Scraper ─────────────────────────────────────────────────────────
-if 'scraper' not in st.session_state:
-    st.session_state.scraper = BinanceScraper()
+# ── Initialize Scraper (done after proxy input, see sidebar) ──────────────────
 
 # ── Sidebar ────────────────────────────────────────────────────────────────────
 with st.sidebar:
     st.markdown("### ⚙️ Control Panel")
+    st.divider()
+
+    proxy_url = st.text_input(
+        "🌐 Proxy URL (required on Streamlit Cloud)",
+        placeholder="http://user:pass@host:port",
+        help="Binance blocks US IPs (HTTP 451). Enter an HTTP/SOCKS5 proxy outside the US.",
+        key="proxy_url"
+    )
+
+    if not proxy_url:
+        st.warning("⚠️ No proxy set. Requests will fail on Streamlit Cloud (geo-block).")
+
     st.divider()
     with st.form("scrape_config"):
         pages = st.slider("📄 Scrape Depth (Pages)", 1, 10, 2)
@@ -188,6 +198,12 @@ with st.sidebar:
 
     st.divider()
     st.markdown("<span style='color:#8b949e;font-size:.8rem'>Data sourced from Binance Copy Trading API</span>", unsafe_allow_html=True)
+
+# ── Initialize / reinitialize scraper based on current proxy ───────────────────
+current_proxy = st.session_state.get("proxy_url", "") or None
+if 'scraper' not in st.session_state or st.session_state.get('_last_proxy') != current_proxy:
+    st.session_state.scraper = BinanceScraper(proxy=current_proxy)
+    st.session_state._last_proxy = current_proxy
 
 # ── Fetch ──────────────────────────────────────────────────────────────────────
 if run:
