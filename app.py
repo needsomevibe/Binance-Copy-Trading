@@ -248,6 +248,10 @@ for d in st.session_state.master_data:
     })
 df = pd.DataFrame(rows)
 
+if df.empty:
+    st.warning("⚠️ No trader data returned. Try increasing the page count or changing the sort/time range.")
+    st.stop()
+
 # ── Filters ────────────────────────────────────────────────────────────────────
 with st.expander("🔍 Filter Traders", expanded=True):
     if "f_roi"    not in st.session_state: st.session_state.f_roi    = 0.0
